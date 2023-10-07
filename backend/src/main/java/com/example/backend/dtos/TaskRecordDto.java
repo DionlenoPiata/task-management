@@ -8,5 +8,5 @@ import java.util.Date;
 import java.util.UUID;
 
 public record TaskRecordDto(@NotBlank String name, TaskStatus status, Date dateStart, Date dateEnd,
-                            UUID userID) {
+                            UUID userId) {
 }
