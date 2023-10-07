@@ -4,7 +4,7 @@ CREATE TABLE tasks (
     status smallint,
     dateStart timestamp(6) without time zone,
     dateEnd timestamp(6) without time zone,
-    userID uuid NOT NULL,
+    userID uuid,
     PRIMARY KEY (id),
     FOREIGN KEY (userID) REFERENCES users(id)
 );
