@@ -1,6 +1,6 @@
 package com.example.backend.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.UUID;
 

@@ -1,33 +1,19 @@
-package com.example.backend.models;
+package com.example.backend.dtos;
 
 import com.example.backend.enums.TaskStatus;
-import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Entity
-@Table(name = "TASKS")
-public class TaskModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public class TaskDto {
+    @NotBlank
     private String name;
     private TaskStatus status;
-    @Temporal(TemporalType.DATE)
     private Date startDate;
-    @Temporal(TemporalType.DATE)
     private Date endDate;
     private UUID userId;
     private UUID taskId;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -77,3 +63,5 @@ public class TaskModel {
         this.taskId = taskId;
     }
 }
+
+
