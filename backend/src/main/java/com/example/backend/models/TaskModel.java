@@ -14,9 +14,12 @@ public class TaskModel {
     private UUID id;
     private String name;
     private TaskStatus status;
-    private Date dateStart;
-    private Date dateEnd;
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
+    @Temporal(TemporalType.DATE)
+    private Date endDate;
     private UUID userId;
+    private UUID taskId;
 
     public UUID getId() {
         return id;
@@ -42,27 +45,35 @@ public class TaskModel {
         this.status = status;
     }
 
-    public Date getDateStart() {
-        return dateStart;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setDateStart(Date dateStart) {
-        this.dateStart = dateStart;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getDateEnd() {
-        return dateEnd;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setDateEnd(Date dateEnd) {
-        this.dateEnd = dateEnd;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public UUID getUserId() {
         return userId;
     }
 
-    public void setUserID(UUID userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public UUID getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(UUID taskId) {
+        this.taskId = taskId;
     }
 }

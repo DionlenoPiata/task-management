@@ -1,6 +1,7 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.TaskRecordDto;
+import com.example.backend.enums.TaskStatus;
 import com.example.backend.models.TaskModel;
 import com.example.backend.repositories.TaskRepository;
 import jakarta.validation.Valid;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,11 +23,6 @@ public class TaskController {
 
     @Autowired
     TaskRepository taskRepository;
-
-    // get com filtro
-    // create
-    // update
-    // delete
 
     @PostMapping
     public ResponseEntity<TaskModel> create(@RequestBody @Valid TaskRecordDto taskRecordDto) {
@@ -38,11 +36,25 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAll());
     }
 
+    @GetMapping("/search/startDateAndEndDate")
+    public ResponseEntity<List<TaskModel>> findStartDateAndEndDate(@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate) throws ParseException {
+        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllByStartDateAndEndDate(new SimpleDateFormat("yyyy-MM-dd").parse(startDate), new SimpleDateFormat("yyyy-MM-dd").parse(endDate)));
+    }
+
+    @GetMapping("/search/allLate")
+    public ResponseEntity<List<TaskModel>> findAllLate() {
+        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllLate());
+    }
+
+    @GetMapping("/search/byUserAndStatus")
+    public ResponseEntity<List<TaskModel>> findByUserAndStatus(@RequestParam(required = false) UUID userId, @RequestParam(required = false) TaskStatus status)  {
+        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllByUserAndStatus( userId, status));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable(value="id") UUID id,
-                                                @RequestBody @Valid TaskRecordDto taskRecordDto) {
+    public ResponseEntity<Object> update(@PathVariable(value = "id") UUID id, @RequestBody @Valid TaskRecordDto taskRecordDto) {
         Optional<TaskModel> taskO = taskRepository.findById(id);
-        if(taskO.isEmpty()) {
+        if (taskO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
         }
         var task = taskO.get();
@@ -51,12 +63,14 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(value="id") UUID id) {
+    public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id) {
         Optional<TaskModel> taskO = taskRepository.findById(id);
-        if(taskO.isEmpty()) {
+        if (taskO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
         }
         taskRepository.delete(taskO.get());
         return ResponseEntity.status(HttpStatus.OK).body("Task deleted successfully.");
     }
+
+
 }
