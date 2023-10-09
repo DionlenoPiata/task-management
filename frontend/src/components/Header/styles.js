@@ -5,7 +5,10 @@ export const Container = styled.div`
   padding: 0 30px;
   background: #0053c6;
   color: #fff;
-
   display: flex;
   align-items: center;
+
+  h2 {
+    color: #ff0000;
+  }
 `;
