@@ -91,6 +91,20 @@ function Board() {
     setElements(listCopy);
   };
 
+  const getNameList = (name) => {
+    switch (name) {
+      case "WAITING":
+        return "AGUARDANDO";
+      case "STARTED":
+        return "INICIADA";
+      case "CLOSED":
+        return "ENCERRADA";
+
+      default:
+        return "TAREFAS";
+    }
+  };
+
   return (
     <DragDropContextContainer>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -101,6 +115,7 @@ function Board() {
               subElements={elements["SUB_TASKS"]}
               key={listKey}
               name={listKey}
+              title={getNameList(listKey)}
             />
           ))}
         </ListGrid>

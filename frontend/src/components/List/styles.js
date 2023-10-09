@@ -22,15 +22,6 @@ export const Container = styled.div`
       padding: 10px 10px;
       margin: 10px;
     }
-
-    button {
-      width: 42px;
-      height: 42px;
-      border-radius: 18px;
-      background: #3b5bfd;
-      border: 0;
-      cursor: pointer;
-    }
   }
 
   ul {

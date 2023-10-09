@@ -1,21 +1,17 @@
 import React from "react";
 
-import { MdAdd } from "react-icons/md";
+import Button from "@mui/material/Button";
 import { Container } from "./styles";
 import Card from "../Card";
 
 import { Droppable } from "react-beautiful-dnd";
 
-function List({ name, elements, subElements }) {
+function List({ name, title, elements, subElements }) {
   return (
     <Container task={name === "TASKS"} done={name === "CLOSED"}>
       <header>
-        <h4>{name}</h4>
-        {name === "TASKS" && (
-          <button type="button">
-            <MdAdd size={24} color="#FFF" />
-          </button>
-        )}
+        <h4>{title}</h4>
+        {name === "TASKS" && <Button variant="outlined">Nova </Button>}
       </header>
 
       <Droppable droppableId={`${name}`}>
