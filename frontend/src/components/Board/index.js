@@ -4,10 +4,10 @@ import { Container } from "./styles";
 function Board() {
   return (
     <Container>
-      <List />
-      <List />
-      <List />
-      <List />
+      <List title={"TAREFAS"} creatable />
+      <List title={"AGUARDANDO"} />
+      <List title={"INICIADA"} />
+      <List title={"ENCERRADA"} done />
     </Container>
   );
 }
