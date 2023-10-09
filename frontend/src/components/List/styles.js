@@ -2,8 +2,10 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   padding: 0 15px;
+  margin: 5px;
   height: 100%;
   flex: 0 0 320px;
+  background: #d4d4d4;
   opacity: ${(props) => (props.done ? 0.6 : 1)};
 
   & + div {
@@ -16,10 +18,9 @@ export const Container = styled.div`
     align-items: center;
     height: 42px;
 
-    h2 {
-      font-weight: 500;
-      font-size: 16px;
-      padding: 0 10px;
+    h4 {
+      padding: 10px 10px;
+      margin: 10px;
     }
 
     button {

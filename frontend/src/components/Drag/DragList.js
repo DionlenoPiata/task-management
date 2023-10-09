@@ -1,7 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
-import List from "../List";
-import { DragDropContextContainer, ListGrid } from "./styles";
+import DraggableElement from "./DraggableElement";
+
+const DragDropContextContainer = styled.div`
+  padding: 20px;
+  border: 4px solid indianred;
+  border-radius: 6px;
+`;
+
+const ListGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 8px;
+`;
 
 // fake data generator
 const getItems = (count, prefix) =>
@@ -26,17 +38,16 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-const lists = ["TAREFAS", "AGUARDANDO", "INICIADA", "ENCERRADA"];
+const lists = ["todo", "inProgress", "done"];
 
-const generateLists = () => {
-  return lists.reduce(
-    (acc, listKey) => ({ ...acc, [listKey]: getItems(3, listKey) }),
+const generateLists = () =>
+  lists.reduce(
+    (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey) }),
     {}
   );
-};
 
-function Board() {
-  const [elements, setElements] = useState(generateLists());
+function DragList() {
+  const [elements, setElements] = React.useState(generateLists());
 
   useEffect(() => {
     setElements(generateLists());
@@ -69,7 +80,11 @@ function Board() {
       <DragDropContext onDragEnd={onDragEnd}>
         <ListGrid>
           {lists.map((listKey) => (
-            <List elements={elements[listKey]} key={listKey} name={listKey} />
+            <DraggableElement
+              elements={elements[listKey]}
+              key={listKey}
+              prefix={listKey}
+            />
           ))}
         </ListGrid>
       </DragDropContext>
@@ -77,4 +92,4 @@ function Board() {
   );
 }
 
-export default Board;
+export default DragList;
