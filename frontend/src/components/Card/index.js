@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
@@ -5,7 +6,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Avatar, CardHeader, Author, CardFooter, DragItem } from "./styles";
 
-function Card({ item, index }) {
+function Card({ index, item, subItems }) {
+  const subTaks = subItems.filter((el) => el.taskId === item.id);
+
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -17,7 +20,7 @@ function Card({ item, index }) {
             {...provided.dragHandleProps}
           >
             <Stack direction="row" justifyContent="space-between" spacing={0}>
-              <CardHeader>Deploy aplicação</CardHeader>
+              <CardHeader>{item.name}</CardHeader>
               <Stack direction="row">
                 <IconButton aria-label="delete">
                   <EditIcon />
@@ -28,18 +31,27 @@ function Card({ item, index }) {
               </Stack>
             </Stack>
 
-            <span>
-              Inicia em: 10-10-2023 <br />
-              Prazo finalizar: 12/10/2023
-            </span>
+            {(item.startDate || item.endDate) && (
+              <span>
+                {item.startDate && `Inicia em: ${item.startDate}`} <br />
+                {item.endDate && `Prazo finalizar: ${item.endDate}`}
+              </span>
+            )}
 
-            <span>
-              SubTarefas
-              <br />- Configurar docker
-              <br />- Configurar Nginx
-            </span>
+            {subTaks.length > 0 && (
+              <span>
+                Sub Tarefas
+                <br />
+                {subTaks.map((el) => (
+                  <>
+                    <br />- {el.name}
+                  </>
+                ))}
+              </span>
+            )}
+
             <CardFooter>
-              <span>{"#47fh4d"}</span>
+              <span>{`#${item.id.substr(0, 5)}`}</span>
               <Author>
                 {"Dionleno"}
                 <Avatar

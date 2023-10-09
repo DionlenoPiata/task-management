@@ -6,12 +6,12 @@ import Card from "../Card";
 
 import { Droppable } from "react-beautiful-dnd";
 
-function List({ name, elements }) {
+function List({ name, elements, subElements }) {
   return (
-    <Container done={name === "ENCERRADA"}>
+    <Container task={name === "TASKS"} done={name === "CLOSED"}>
       <header>
         <h4>{name}</h4>
-        {name === "TAREFAS" && (
+        {name === "TASKS" && (
           <button type="button">
             <MdAdd size={24} color="#FFF" />
           </button>
@@ -21,9 +21,15 @@ function List({ name, elements }) {
       <Droppable droppableId={`${name}`}>
         {(provided) => (
           <ul {...provided.droppableProps} ref={provided.innerRef}>
-            {elements.map((item, index) => (
-              <Card key={item.id} item={item} index={index} />
-            ))}
+            {elements &&
+              elements.map((item, index) => (
+                <Card
+                  key={item.id}
+                  item={item}
+                  subItems={subElements}
+                  index={index}
+                />
+              ))}
             {provided.placeholder}
           </ul>
         )}

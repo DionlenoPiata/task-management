@@ -8,7 +8,7 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
 
-  h2 {
+  h1 {
     color: #ff0000;
   }
 `;

@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { DragDropContext } from "react-beautiful-dnd";
 import List from "../List";
 import { DragDropContextContainer, ListGrid } from "./styles";
-
-// fake data generator
-const getItems = (count, prefix) =>
-  Array.from({ length: count }, (v, k) => k).map((k) => {
-    const randomId = Math.floor(Math.random() * 1000);
-    return {
-      id: `item-${randomId}`,
-      prefix,
-      content: `item ${randomId}`,
-    };
-  });
 
 const removeFromList = (list, index) => {
   const result = Array.from(list);
@@ -26,21 +16,58 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-const lists = ["TAREFAS", "AGUARDANDO", "INICIADA", "ENCERRADA"];
-
-const generateLists = () => {
-  return lists.reduce(
-    (acc, listKey) => ({ ...acc, [listKey]: getItems(3, listKey) }),
-    {}
-  );
-};
+const lists = ["TASKS", "WAITING", "STARTED", "CLOSED"];
 
 function Board() {
-  const [elements, setElements] = useState(generateLists());
+  const [elements, setElements] = useState([]);
 
   useEffect(() => {
-    setElements(generateLists());
+    generateLists();
   }, []);
+
+  const generateLists = async () => {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8080/tasks",
+      headers: {},
+    };
+
+    async function makeRequest() {
+      try {
+        const response = await axios.request(config);
+        return response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    let data = await makeRequest();
+
+    let tasksAux = data.filter(
+      (el) => el.status === null && el.taskId === null
+    );
+    let waitingsAux = data.filter(
+      (el) => el.status === "WAITING" && el.taskId === null
+    );
+    let startedsAux = data.filter(
+      (el) => el.status === "STARTED" && el.taskId === null
+    );
+    let closedsAux = data.filter(
+      (el) => el.status === "CLOSED" && el.taskId === null
+    );
+
+    let letSubTasksAux = data.filter((el) => el.taskId !== null);
+
+    let tasks = [];
+    tasks["TASKS"] = tasksAux;
+    tasks["WAITING"] = waitingsAux;
+    tasks["STARTED"] = startedsAux;
+    tasks["CLOSED"] = closedsAux;
+    tasks["SUB_TASKS"] = letSubTasksAux;
+
+    setElements(tasks);
+  };
 
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -69,7 +96,12 @@ function Board() {
       <DragDropContext onDragEnd={onDragEnd}>
         <ListGrid>
           {lists.map((listKey) => (
-            <List elements={elements[listKey]} key={listKey} name={listKey} />
+            <List
+              elements={elements[listKey]}
+              subElements={elements["SUB_TASKS"]}
+              key={listKey}
+              name={listKey}
+            />
           ))}
         </ListGrid>
       </DragDropContext>

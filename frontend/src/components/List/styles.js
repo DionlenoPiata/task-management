@@ -5,7 +5,7 @@ export const Container = styled.div`
   margin: 5px;
   height: 100%;
   flex: 0 0 320px;
-  background: #d4d4d4;
+  background: ${(props) => (props.task ? "#d4d4d4" : "#d4d4d4")};
   opacity: ${(props) => (props.done ? 0.6 : 1)};
 
   & + div {
