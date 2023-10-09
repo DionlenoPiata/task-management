@@ -1,17 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import { Container } from "./styles";
 import Card from "../Card";
 
 import { Droppable } from "react-beautiful-dnd";
+import DialogCreateTask from "../DialogCreateTask";
 
 function List({ name, title, elements, subElements }) {
+  const [openDialogCreate, setOpenDialogCreate] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenDialogCreate(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialogCreate(false);
+  };
+
   return (
     <Container task={name === "TASKS"} done={name === "CLOSED"}>
+      <DialogCreateTask
+        openDialogCreate={openDialogCreate}
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+      />
       <header>
         <h4>{title}</h4>
-        {name === "TASKS" && <Button variant="outlined">Nova </Button>}
+        {name === "TASKS" && (
+          <Button variant="outlined" onClick={handleClickOpen}>
+            Nova{" "}
+          </Button>
+        )}
       </header>
 
       <Droppable droppableId={`${name}`}>

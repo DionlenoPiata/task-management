@@ -3,6 +3,7 @@ import axios from "axios";
 import { DragDropContext } from "react-beautiful-dnd";
 import List from "../List";
 import { DragDropContextContainer, ListGrid } from "./styles";
+import { convertDataInListTasks } from "../../utils/tasksUtils";
 
 const removeFromList = (list, index) => {
   const result = Array.from(list);
@@ -44,29 +45,7 @@ function Board() {
 
     let data = await makeRequest();
 
-    let tasksAux = data.filter(
-      (el) => el.status === null && el.taskId === null
-    );
-    let waitingsAux = data.filter(
-      (el) => el.status === "WAITING" && el.taskId === null
-    );
-    let startedsAux = data.filter(
-      (el) => el.status === "STARTED" && el.taskId === null
-    );
-    let closedsAux = data.filter(
-      (el) => el.status === "CLOSED" && el.taskId === null
-    );
-
-    let letSubTasksAux = data.filter((el) => el.taskId !== null);
-
-    let tasks = [];
-    tasks["TASKS"] = tasksAux;
-    tasks["WAITING"] = waitingsAux;
-    tasks["STARTED"] = startedsAux;
-    tasks["CLOSED"] = closedsAux;
-    tasks["SUB_TASKS"] = letSubTasksAux;
-
-    setElements(tasks);
+    setElements(convertDataInListTasks(data));
   };
 
   const onDragEnd = (result) => {
