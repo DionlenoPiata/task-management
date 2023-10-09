@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -7,6 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,9 +18,14 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import dayjs from "dayjs";
 import axios from "axios";
+import TasksContext from "../../Contexts/TasksContext";
+import { convertDataInListTasks } from "../../utils/tasksUtils";
 
 function DialogCreateTask({ openDialogCreate, handleClose }) {
   //const [openCreateUser, setOpenCreateUser] = useState(false);
+
+  const [loadingCreateTask, setLoadingCreateTask] = useState(false);
+  const [elements, setElements] = useContext(TasksContext);
 
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(dayjs("2022-04-17"));
@@ -51,6 +57,7 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
   };
 
   const handleCreateTask = () => {
+    setLoadingCreateTask(true);
     let data = JSON.stringify({
       name: name,
       userId: userSelect,
@@ -59,20 +66,29 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
       status: null,
     });
 
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "http://localhost:8080/tasks",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
-
     async function makeRequest() {
       try {
-        const response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
+        await axios.request({
+          method: "post",
+          maxBodyLength: Infinity,
+          url: "http://localhost:8080/tasks",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        });
+
+        const response = await axios.request({
+          method: "get",
+          maxBodyLength: Infinity,
+          url: "http://localhost:8080/tasks",
+          headers: {},
+        });
+        setElements(convertDataInListTasks(response.data));
+        setTimeout(() => {
+          setLoadingCreateTask(false);
+          handleClose();
+        }, 1000);
       } catch (error) {
         console.log(error);
       }
@@ -154,9 +170,13 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={handleCreateTask} autoFocus>
+          <LoadingButton
+            loading={loadingCreateTask}
+            onClick={handleCreateTask}
+            autoFocus
+          >
             Criar
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </LocalizationProvider>

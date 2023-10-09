@@ -4,6 +4,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import List from "../List";
 import { DragDropContextContainer, ListGrid } from "./styles";
 import { convertDataInListTasks } from "../../utils/tasksUtils";
+import TasksContext from "../../Contexts/TasksContext";
 
 const removeFromList = (list, index) => {
   const result = Array.from(list);
@@ -85,21 +86,23 @@ function Board() {
   };
 
   return (
-    <DragDropContextContainer>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <ListGrid>
-          {lists.map((listKey) => (
-            <List
-              elements={elements[listKey]}
-              subElements={elements["SUB_TASKS"]}
-              key={listKey}
-              name={listKey}
-              title={getNameList(listKey)}
-            />
-          ))}
-        </ListGrid>
-      </DragDropContext>
-    </DragDropContextContainer>
+    <TasksContext.Provider value={[elements, setElements]}>
+      <DragDropContextContainer>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <ListGrid>
+            {lists.map((listKey) => (
+              <List
+                elements={elements[listKey]}
+                subElements={elements["SUB_TASKS"]}
+                key={listKey}
+                name={listKey}
+                title={getNameList(listKey)}
+              />
+            ))}
+          </ListGrid>
+        </DragDropContext>
+      </DragDropContextContainer>
+    </TasksContext.Provider>
   );
 }
 
