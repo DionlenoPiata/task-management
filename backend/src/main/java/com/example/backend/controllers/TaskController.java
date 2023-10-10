@@ -3,6 +3,7 @@ package com.example.backend.controllers;
 import com.example.backend.dtos.TaskDto;
 import com.example.backend.enums.TaskStatus;
 import com.example.backend.models.TaskModel;
+import com.example.backend.models.UserModel;
 import com.example.backend.repositories.TaskRepository;
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -36,19 +37,24 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getById(@PathVariable(value = "id") UUID id) {
+        Optional<TaskModel> taskO = taskRepository.findById(id);
+        return taskO.<ResponseEntity<Object>>map(task -> ResponseEntity.status(HttpStatus.OK).body(task)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found."));
+    }
     @GetMapping("/search/startDateAndEndDate")
     public ResponseEntity<List<TaskModel>> findStartDateAndEndDate(@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate) throws ParseException {
         return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllByStartDateAndEndDate(new SimpleDateFormat("yyyy-MM-dd").parse(startDate), new SimpleDateFormat("yyyy-MM-dd").parse(endDate)));
     }
 
-    @GetMapping("/search/allLate")
-    public ResponseEntity<List<TaskModel>> findAllLate() {
-        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllLate());
-    }
-
     @GetMapping("/search/byUserAndStatus")
     public ResponseEntity<List<TaskModel>> findByUserAndStatus(@RequestParam(required = false) UUID userId, @RequestParam(required = false) TaskStatus status)  {
         return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllByUserAndStatus( userId, status));
+    }
+
+    @GetMapping("/search/allLate")
+    public ResponseEntity<List<TaskModel>> findAllLate() {
+        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllLate());
     }
 
     @PutMapping("/{id}")
