@@ -7,6 +7,6 @@ export const DragDropContextContainer = styled.div`
 
 export const ListGrid = styled.div`
   display: flex;
-  padding: 30px 0;
+  padding: 5px 0;
   height: calc(100% - 80px);
 `;

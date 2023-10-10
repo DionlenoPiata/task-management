@@ -5,6 +5,7 @@ import List from "../List";
 import { DragDropContextContainer, ListGrid } from "./styles";
 import { convertDataInListTasks } from "../../utils/tasksUtils";
 import TasksContext from "../../Contexts/TasksContext";
+import Filter from "../Filter";
 
 const removeFromList = (list, index) => {
   const result = Array.from(list);
@@ -114,6 +115,7 @@ function Board() {
 
   return (
     <TasksContext.Provider value={[elements, setElements]}>
+      <Filter />
       <DragDropContextContainer>
         <DragDropContext onDragEnd={onDragEnd}>
           <ListGrid>

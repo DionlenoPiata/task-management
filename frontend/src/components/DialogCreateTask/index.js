@@ -28,8 +28,8 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
   const [elements, setElements] = useContext(TasksContext);
 
   const [name, setName] = useState("");
-  const [startDate, setStartDate] = useState(dayjs("2022-04-17"));
-  const [endDate, setEndDate] = useState(dayjs("2022-04-17"));
+  const [startDate, setStartDate] = useState(dayjs("2023-10-01"));
+  const [endDate, setEndDate] = useState(dayjs("2023-10-03"));
   const [userSelect, setUserSelect] = useState(null);
 
   const [users, setUsers] = useState([]);
@@ -134,7 +134,7 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
               <Stack direction="row" spacing={2}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 240 }}>
                   <InputLabel id="demo-simple-select-helper-label">
-                    Usuários
+                    Responsável
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-helper-label"

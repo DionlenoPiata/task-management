@@ -151,7 +151,7 @@ function DialogCreateTask({ item, openDialogCreate, handleClose }) {
               <Stack direction="row" spacing={2}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 240 }}>
                   <InputLabel id="demo-simple-select-helper-label">
-                    Usuários
+                    Responsável
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-helper-label"
