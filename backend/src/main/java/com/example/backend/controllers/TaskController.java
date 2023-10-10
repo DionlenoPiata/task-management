@@ -47,14 +47,14 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllByStartDateAndEndDate(new SimpleDateFormat("yyyy-MM-dd").parse(startDate), new SimpleDateFormat("yyyy-MM-dd").parse(endDate)));
     }
 
-    @GetMapping("/search/allLate")
-    public ResponseEntity<List<TaskModel>> findAllLate() {
-        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllLate());
-    }
-
     @GetMapping("/search/byUserAndStatus")
     public ResponseEntity<List<TaskModel>> findByUserAndStatus(@RequestParam(required = false) UUID userId, @RequestParam(required = false) TaskStatus status)  {
         return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllByUserAndStatus( userId, status));
+    }
+
+    @GetMapping("/search/allLate")
+    public ResponseEntity<List<TaskModel>> findAllLate() {
+        return ResponseEntity.status(HttpStatus.OK).body(taskRepository.findAllLate());
     }
 
     @PutMapping("/{id}")
