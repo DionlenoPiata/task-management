@@ -1,16 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 import axios from "axios";
 import { Avatar, CardHeader, Author, CardFooter, DragItem } from "./styles";
+import TasksContext from "../../Contexts/TasksContext";
+import { convertDataInListTasks } from "../../utils/tasksUtils";
 
 function Card({ index, item, subItems }) {
   const subTaks = subItems.filter((el) => el.taskId === item.id);
 
   const [user, setUser] = useState(null);
+  const [loadingDeleteTask, setLoadingDeleteTask] = useState(false);
+
+  const [elements, setElements] = useContext(TasksContext);
 
   useEffect(() => {
     getUser();
@@ -34,6 +41,35 @@ function Card({ index, item, subItems }) {
     }
   };
 
+  const handleDeleteTask = async () => {
+    setLoadingDeleteTask(true);
+    async function makeRequest() {
+      try {
+        await axios.request({
+          method: "delete",
+          maxBodyLength: Infinity,
+          url: `http://localhost:8080/tasks/${item.id}`,
+          headers: {},
+        });
+        const response = await axios.request({
+          method: "get",
+          maxBodyLength: Infinity,
+          url: "http://localhost:8080/tasks",
+          headers: {},
+        });
+        setTimeout(() => {
+          setElements(convertDataInListTasks(response.data));
+          setLoadingDeleteTask(false);
+        }, 1000);
+      } catch (error) {
+        console.log(error);
+        setLoadingDeleteTask(false);
+      }
+    }
+
+    makeRequest();
+  };
+
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -47,10 +83,10 @@ function Card({ index, item, subItems }) {
             <Stack direction="row" justifyContent="space-between" spacing={0}>
               <CardHeader>{item.name}</CardHeader>
               <Stack direction="row">
-                <IconButton aria-label="delete">
+                <IconButton onClick={() => {}} aria-label="delete">
                   <EditIcon />
                 </IconButton>
-                <IconButton aria-label="delete">
+                <IconButton onClick={handleDeleteTask} aria-label="delete">
                   <DeleteIcon />
                 </IconButton>
               </Stack>
@@ -84,6 +120,11 @@ function Card({ index, item, subItems }) {
                 />
               </Author>
             </CardFooter>
+            {loadingDeleteTask && (
+              <Box sx={{ width: "100%" }}>
+                <LinearProgress />
+              </Box>
+            )}
           </DragItem>
         );
       }}
