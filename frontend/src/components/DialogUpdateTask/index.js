@@ -37,7 +37,7 @@ function DialogCreateTask({ item, openDialogCreate, handleClose }) {
       try {
         const response = await axios.request({
           method: "get",
-          url: "http://localhost:8080/users",
+          url: `${process.env.REACT_APP_BASE_URL_API}/users`,
           headers: {},
         });
         setUsers(response.data);
@@ -57,7 +57,7 @@ function DialogCreateTask({ item, openDialogCreate, handleClose }) {
       try {
         const response = await axios.request({
           method: "get",
-          url: `http://localhost:8080/users/${item.userId}`,
+          url: `${process.env.REACT_APP_BASE_URL_API}/users/${item.userId}`,
           headers: {},
         });
         setUserSelect(response.data.id);
@@ -88,7 +88,7 @@ function DialogCreateTask({ item, openDialogCreate, handleClose }) {
       try {
         await axios.request({
           method: "put",
-          url: `http://localhost:8080/tasks/${item.id}`,
+          url: `${process.env.REACT_APP_BASE_URL_API}/tasks/${item.id}`,
           headers: {
             "Content-Type": "application/json",
           },
@@ -98,7 +98,7 @@ function DialogCreateTask({ item, openDialogCreate, handleClose }) {
         const response = await axios.request({
           method: "get",
           maxBodyLength: Infinity,
-          url: "http://localhost:8080/tasks",
+          url: `${process.env.REACT_APP_BASE_URL_API}/tasks`,
           headers: {},
         });
         setElements(convertDataInListTasks(response.data));

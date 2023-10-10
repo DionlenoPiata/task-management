@@ -32,7 +32,7 @@ function Board() {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:8080/tasks",
+      url: `${process.env.REACT_APP_BASE_URL_API}/tasks`,
       headers: {},
     };
 
@@ -75,7 +75,7 @@ function Board() {
       const response = await axios.request({
         method: "get",
         maxBodyLength: Infinity,
-        url: `http://localhost:8080/tasks/${result.draggableId}`,
+        url: `${process.env.REACT_APP_BASE_URL_API}/tasks/${result.draggableId}`,
         headers: {},
       });
       let data = response.data;
@@ -88,7 +88,7 @@ function Board() {
       await axios.request({
         method: "put",
         maxBodyLength: Infinity,
-        url: `http://localhost:8080/tasks/${result.draggableId}`,
+        url: `${process.env.REACT_APP_BASE_URL_API}/tasks/${result.draggableId}`,
         headers: {
           "Content-Type": "application/json",
         },

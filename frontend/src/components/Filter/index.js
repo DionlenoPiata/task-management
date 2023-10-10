@@ -40,7 +40,7 @@ function Filter() {
   useEffect(() => {
     let config = {
       method: "get",
-      url: "http://localhost:8080/users",
+      url: `${process.env.REACT_APP_BASE_URL_API}/users`,
       headers: {},
     };
 
@@ -72,7 +72,7 @@ function Filter() {
     const formattedStartDate = dayjs(startDate).format("YYYY-MM-DD");
     const formattedEndDate = dayjs(endDate).format("YYYY-MM-DD");
     try {
-      let url = "http://localhost:8080/tasks";
+      let url = `${process.env.REACT_APP_BASE_URL_API}/tasks`;
 
       switch (typeFilter) {
         case "date":
@@ -99,7 +99,7 @@ function Filter() {
           break;
 
         default:
-          url = "http://localhost:8080/tasks";
+          url = `${process.env.REACT_APP_BASE_URL_API}/tasks`;
           break;
       }
 

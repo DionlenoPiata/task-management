@@ -16,7 +16,7 @@ frontend/coverage
 /frontend/.env.local
 /frontend/.env.development.local
 /frontend/.env.test.local
-/frontend/.env.production.local
+/frontend/.env.production
 
 /frontend/npm-debug.log*
 /frontend/yarn-debug.log*

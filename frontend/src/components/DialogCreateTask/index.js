@@ -37,7 +37,7 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
   useEffect(() => {
     let config = {
       method: "get",
-      url: "http://localhost:8080/users",
+      url: `${process.env.REACT_APP_BASE_URL_API}/users`,
       headers: {},
     };
 
@@ -71,7 +71,7 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
         await axios.request({
           method: "post",
           maxBodyLength: Infinity,
-          url: "http://localhost:8080/tasks",
+          url: `${process.env.REACT_APP_BASE_URL_API}/tasks`,
           headers: {
             "Content-Type": "application/json",
           },
@@ -81,7 +81,7 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
         const response = await axios.request({
           method: "get",
           maxBodyLength: Infinity,
-          url: "http://localhost:8080/tasks",
+          url: `${process.env.REACT_APP_BASE_URL_API}/tasks`,
           headers: {},
         });
         setElements(convertDataInListTasks(response.data));

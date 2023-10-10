@@ -30,7 +30,7 @@ function Card({ index, item, subItems }) {
       try {
         const response = await axios.request({
           method: "get",
-          url: `http://localhost:8080/users/${item.userId}`,
+          url: `${process.env.REACT_APP_BASE_URL_API}/users/${item.userId}`,
           headers: {},
         });
         setUser(response.data);
@@ -58,13 +58,13 @@ function Card({ index, item, subItems }) {
         await axios.request({
           method: "delete",
           maxBodyLength: Infinity,
-          url: `http://localhost:8080/tasks/${item.id}`,
+          url: `${process.env.REACT_APP_BASE_URL_API}/tasks/${item.id}`,
           headers: {},
         });
         const response = await axios.request({
           method: "get",
           maxBodyLength: Infinity,
-          url: "http://localhost:8080/tasks",
+          url: `${process.env.REACT_APP_BASE_URL_API}/tasks`,
           headers: {},
         });
         setTimeout(() => {
