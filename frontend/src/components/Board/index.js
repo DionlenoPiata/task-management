@@ -49,7 +49,7 @@ function Board() {
     setElements(convertDataInListTasks(data));
   };
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     if (!result.destination) {
       return;
     }
@@ -60,6 +60,7 @@ function Board() {
       sourceList,
       result.source.index
     );
+
     listCopy[result.source.droppableId] = newSourceList;
     const destinationList = listCopy[result.destination.droppableId];
     listCopy[result.destination.droppableId] = addToList(
@@ -67,8 +68,34 @@ function Board() {
       result.destination.index,
       removedElement
     );
-
     setElements(listCopy);
+
+    try {
+      const response = await axios.request({
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `http://localhost:8080/tasks/${result.draggableId}`,
+        headers: {},
+      });
+      let data = response.data;
+      data.status = result.destination.droppableId;
+
+      if (result.destination.droppableId === "TASKS") {
+        data.status = null;
+      }
+
+      await axios.request({
+        method: "put",
+        maxBodyLength: Infinity,
+        url: `http://localhost:8080/tasks/${result.draggableId}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getNameList = (name) => {
