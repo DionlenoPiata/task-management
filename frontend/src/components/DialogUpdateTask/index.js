@@ -21,29 +21,25 @@ import axios from "axios";
 import TasksContext from "../../Contexts/TasksContext";
 import { convertDataInListTasks } from "../../utils/tasksUtils";
 
-function DialogCreateTask({ openDialogCreate, handleClose }) {
-  //const [openCreateUser, setOpenCreateUser] = useState(false);
-
-  const [loadingCreateTask, setLoadingCreateTask] = useState(false);
+function DialogCreateTask({ item, openDialogCreate, handleClose }) {
+  const [loadingUpdateTask, setLoadingUpdateTask] = useState(false);
   const [elements, setElements] = useContext(TasksContext);
 
-  const [name, setName] = useState("");
-  const [startDate, setStartDate] = useState(dayjs("2022-04-17"));
-  const [endDate, setEndDate] = useState(dayjs("2022-04-17"));
+  const [name, setName] = useState(item.name);
+  const [startDate, setStartDate] = useState(dayjs(item.startDate));
+  const [endDate, setEndDate] = useState(dayjs(item.endDate));
   const [userSelect, setUserSelect] = useState(null);
 
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    let config = {
-      method: "get",
-      url: "http://localhost:8080/users",
-      headers: {},
-    };
-
     async function makeRequest() {
       try {
-        const response = await axios.request(config);
+        const response = await axios.request({
+          method: "get",
+          url: "http://localhost:8080/users",
+          headers: {},
+        });
         setUsers(response.data);
       } catch (error) {
         console.log(error);
@@ -52,26 +48,47 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
     makeRequest();
   }, []);
 
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    async function makeRequest() {
+      try {
+        const response = await axios.request({
+          method: "get",
+          url: `http://localhost:8080/users/${item.userId}`,
+          headers: {},
+        });
+        setUserSelect(response.data.id);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (item.userId) {
+      makeRequest();
+    }
+  };
+
   const handleChangeUser = (event) => {
     setUserSelect(event.target.value);
   };
 
-  const handleCreateTask = () => {
-    setLoadingCreateTask(true);
+  const handleUpdateTask = () => {
+    setLoadingUpdateTask(true);
     let data = JSON.stringify({
       name: name,
       userId: userSelect,
       startDate: startDate,
       endDate: endDate,
-      status: null,
+      status: item.status,
     });
 
     async function makeRequest() {
       try {
         await axios.request({
-          method: "post",
-          maxBodyLength: Infinity,
-          url: "http://localhost:8080/tasks",
+          method: "put",
+          url: `http://localhost:8080/tasks/${item.id}`,
           headers: {
             "Content-Type": "application/json",
           },
@@ -86,12 +103,12 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
         });
         setElements(convertDataInListTasks(response.data));
         setTimeout(() => {
-          setLoadingCreateTask(false);
+          setLoadingUpdateTask(false);
           handleClose();
         }, 1000);
       } catch (error) {
         console.log(error);
-        setLoadingCreateTask(false);
+        setLoadingUpdateTask(false);
       }
     }
     makeRequest();
@@ -151,32 +168,18 @@ function DialogCreateTask({ openDialogCreate, handleClose }) {
                     ))}
                   </Select>
                 </FormControl>
-                {/* <Button onClick={() => setOpenCreateUser(!openCreateUser)}>
-                  Criar
-                </Button> */}
               </Stack>
-              {/* {openCreateUser && (
-                <Stack direction="row" spacing={2}>
-                  <TextField
-                    size="small"
-                    id="standard-basic"
-                    label="Nome do usuário"
-                    variant="standard"
-                  />
-                  <Button>Salvar</Button>
-                </Stack>
-              )} */}
             </Stack>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
           <LoadingButton
-            loading={loadingCreateTask}
-            onClick={handleCreateTask}
+            loading={loadingUpdateTask}
+            onClick={handleUpdateTask}
             autoFocus
           >
-            Criar
+            Atualizar
           </LoadingButton>
         </DialogActions>
       </Dialog>
