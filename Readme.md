@@ -1,39 +1,55 @@
-1 EXECUTANDO O PROJETO:
+# README
 
-- Banco de dados
+## 1. EXECUTANDO O PROJETO
 
-Pré-requisitos:
-ter o docker instalado.
+### Banco de dados
 
-Dentro da pasta do projeto, execute o comando:
+**Pré-requisitos:**
+
+- Ter o Docker instalado.
+
+Dentro da pasta do projeto, execute o seguinte comando para iniciar o banco de dados:
+
+```shell
 docker compose up -d
+```
 
-- Backend
+### Backend
 
-Pré-requisitos:
+**Pré-requisitos:**
 
-ter o java 8 instalado.
+- Ter o Java 8 instalado.
 
-Executando o projeto
+Para executar o projeto, siga os seguintes comandos:
 
-Comandos:
-
+```shell
 cd backend
 ./mvnw clean package
 cd target
 java -jar backend-0.0.1-SNAPSHOT.jar
+```
 
-- Frontend
-  Pré-requisitos:
-  Ter o node instalado
-  Ter o npm instalado
+### Frontend
 
+**Pré-requisitos:**
+
+- Ter o Node instalado.
+- Ter o NPM instalado.
+
+Para iniciar o frontend, siga os seguintes comandos:
+
+```shell
 cd frontend
 npm i
 npm start
+```
 
-2 ACESSANDO DOCUMENTAÇÃO
-https://documenter.getpostman.com/view/12599446/2s9YJgU1Pm
+## 2. ACESSANDO DOCUMENTAÇÃO
 
-3 ACESSANDO FRONTEND
-http://localhost:3000
+A documentação do projeto está disponível no seguinte link:
+[Documentação no Postman](https://documenter.getpostman.com/view/12599446/2s9YJgU1Pm)
+
+## 3. ACESSANDO O FRONTEND
+
+Para acessar o frontend, abra seu navegador e acesse o seguinte endereço:
+[http://localhost:3000](http://localhost:3000)
